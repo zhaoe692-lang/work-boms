@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "id": "workbom.export-wbom",
+  "name": "export-wbom",
+  "displayName": "创建项目",
+  "displayNameI18n": {
+    "zh": "创建项目",
+    "en": "Create Project"
+  },
+  "version": "1.1.4",
+  "description": "在 Cursor / Codex / Claude / workBuddy 中创建可导入 WorkBOM 的项目包（.wbom）。仅收录本协作真实写入的文件，创建后强制校验。",
+  "descriptionI18n": {
+    "zh": "在 Cursor / Codex / Claude / workBuddy 中创建可导入 WorkBOM 的项目包（.wbom）。仅收录本协作真实写入的文件，创建后强制校验。",
+    "en": "Create a WorkBOM project package (.wbom) in Cursor / Codex / Claude / workBuddy. Only files written in this collaboration are included, then validated."
+  },
+  "author": "WorkBOM",
+  "official": true,
+  "kind": "agent-skill",
+  "targets": ["cursor", "codex", "claude", "workbuddy"],
+  "homepage": "https://github.com/zhaoe692-lang/work-boms",
+  "capabilities": ["export-session-wbom", "validate-wbom"],
+  "entry": {
+    "skill": "SKILL.md",
+    "validateScript": "scripts/validate_wbom.py",
+    "exportScript": "scripts/export-session-wbom.py"
+  },
+  "minAppVersion": "0.1.81",
+  "license": "MIT"
+}

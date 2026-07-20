@@ -1,0 +1,20 @@
+# Keep the language bar focused on the app stack (TypeScript + Rust).
+
+# Official agent plugin scripts (Python) — product assets, not primary app code
+src-tauri/resources/plugins/** linguist-vendored
+.agents/** linguist-vendored
+
+# Helper / codegen scripts
+scripts/** linguist-vendored
+
+# Large generated / design assets
+public/models/** linguist-vendored
+*.glb linguist-vendored
+
+# Styles are substantial but not a "language" we want to highlight
+*.css linguist-detectable=false
+
+# Config / lock noise
+package-lock.json linguist-generated
+Cargo.lock linguist-generated
+*.onnx linguist-vendored
