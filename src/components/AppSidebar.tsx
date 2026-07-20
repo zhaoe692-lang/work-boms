@@ -67,8 +67,8 @@ interface AppSidebarProps {
   onImport: () => void;
   importing?: boolean;
   onUpdatePackageMeta?: (title: string, summary: string) => void;
-  onRemovePackage?: () => void;
-  onMovePackageToTrash?: () => void;
+  onRemovePackage?: (packageId?: string) => void;
+  onMovePackageToTrash?: (packageId?: string) => void;
 }
 
 /** Workspace views (middle rail). Labels resolved via t() inside the component. */
@@ -487,6 +487,29 @@ export function AppSidebar({
                           {followOpenFile ? "✓ " : ""}
                           {t("nav.followSelection")}
                         </button>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          disabled={!detail}
+                          onClick={() => {
+                            setMoreOpen(false);
+                            onMovePackageToTrash?.(detail?.package.id);
+                          }}
+                        >
+                          {t("nav.moveAllToTrash")}
+                        </button>
+                        <button
+                          type="button"
+                          role="menuitem"
+                          disabled={!detail}
+                          className="is-danger"
+                          onClick={() => {
+                            setMoreOpen(false);
+                            onRemovePackage?.(detail?.package.id);
+                          }}
+                        >
+                          {t("nav.removeProjectKeepFiles")}
+                        </button>
                       </div>
                     )}
                   </div>
@@ -553,6 +576,17 @@ export function AppSidebar({
                           selectedArtifactId={selectedArtifactId}
                           onSelectPackage={onSelectPackage}
                           onSelectArtifact={onSelectArtifact}
+                          onRemovePackage={onRemovePackage}
+                          onMovePackageToTrash={onMovePackageToTrash}
+                          onOpenSettings={
+                            pkg.id === selectedPackageId
+                              ? openSettings
+                              : () => {
+                                  onSelectPackage(pkg);
+                                  // Open settings after selection settles.
+                                  window.setTimeout(() => setSettingsOpen(true), 0);
+                                }
+                          }
                           forceExpand={Boolean(q && hitPackageIds.has(pkg.id))}
                           artifactFilter={q}
                           collapseToken={collapseToken}
@@ -706,6 +740,9 @@ function ProjectItem({
   selectedArtifactId,
   onSelectPackage,
   onSelectArtifact,
+  onRemovePackage,
+  onMovePackageToTrash,
+  onOpenSettings,
   forceExpand = false,
   artifactFilter = "",
   collapseToken = 0,
@@ -722,6 +759,9 @@ function ProjectItem({
   selectedArtifactId: string | null;
   onSelectPackage: (pkg: PackageSummary) => void;
   onSelectArtifact: (a: ArtifactView, packageId?: string) => void;
+  onRemovePackage?: (packageId?: string) => void;
+  onMovePackageToTrash?: (packageId?: string) => void;
+  onOpenSettings?: () => void;
   forceExpand?: boolean;
   artifactFilter?: string;
   collapseToken?: number;
@@ -735,6 +775,24 @@ function ProjectItem({
   const [preview, setPreview] = useState<PackageDetail | null>(null);
   const [loadingTree, setLoadingTree] = useState(false);
   const [treeError, setTreeError] = useState("");
+  const [ctxMenu, setCtxMenu] = useState<{ x: number; y: number } | null>(null);
+  const ctxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ctxMenu) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!ctxRef.current?.contains(e.target as Node)) setCtxMenu(null);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setCtxMenu(null);
+    };
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [ctxMenu]);
 
   useEffect(() => {
     if (collapseToken > 0) setExpanded(false);
@@ -833,7 +891,14 @@ function ProjectItem({
 
   return (
     <div>
-      <div className="rail-pkg-row">
+      <div
+        className="rail-pkg-row"
+        onContextMenu={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setCtxMenu({ x: e.clientX, y: e.clientY });
+        }}
+      >
         <button
           type="button"
           className="rail-pkg-twist"
@@ -852,6 +917,50 @@ function ProjectItem({
           <span className="rail-pkg-count">{pkg.stats.artifactCount}</span>
         </button>
       </div>
+
+      {ctxMenu &&
+        createPortal(
+          <div
+            ref={ctxRef}
+            className="project-ctx-menu"
+            role="menu"
+            style={{ left: ctxMenu.x, top: ctxMenu.y }}
+          >
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setCtxMenu(null);
+                onSelectPackage(pkg);
+                onOpenSettings?.();
+              }}
+            >
+              {t("nav.projectSettings")}
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setCtxMenu(null);
+                onMovePackageToTrash?.(pkg.id);
+              }}
+            >
+              {t("nav.moveAllToTrash")}
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              className="is-danger"
+              onClick={() => {
+                setCtxMenu(null);
+                onRemovePackage?.(pkg.id);
+              }}
+            >
+              {t("nav.removeProjectKeepFiles")}
+            </button>
+          </div>,
+          document.body,
+        )}
 
       {expanded && (
         <div className="rail-tree">

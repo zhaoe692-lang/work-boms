@@ -7,16 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies & build
 node_modules
 dist
 dist-ssr
 releases
 src-tauri/target
+src-tauri/src-tauri
 **/target
+.ai-sessions
 *.local
-
-# Secrets / credentials
 .env
 .env.*
 !.env.example
@@ -30,22 +29,7 @@ src-tauri/target
 *.crt
 *.entitlements.private
 
-# Local / session / library data (never publish)
-.ai-sessions/
-*.wbom/
-!src-tauri/resources/plugins/**
-ai-vault-session*
-*-session-export-report.json
-*-export-report.json
-
-# Internal docs, demos, drafts (private workspace only)
-/doc/
-/docs/
-/examples/
-/prototypes/
-/assets/
-
-# Editor
+# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -55,3 +39,6 @@ ai-vault-session*
 *.njsproj
 *.sln
 *.sw?
+/examples/
+/doc/
+/docs/

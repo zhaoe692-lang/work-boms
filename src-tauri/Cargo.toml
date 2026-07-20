@@ -1,6 +1,6 @@
 [package]
 name = "workboms"
-version = "0.1.90"
+version = "0.1.92"
 description = "Local-first desktop workspace for AI-generated creative assets"
 authors = ["WorkBOM Contributors"]
 edition = "2021"

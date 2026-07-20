@@ -262,41 +262,6 @@ export default function App() {
     }
   }
 
-  async function handleMovePackageToTrash() {
-    if (!selectedPackageId || !detail?.artifacts.length) return;
-    if (
-      !window.confirm(
-        t("app.confirmTrashPackage", {
-          name: detail.package.title,
-          count: detail.artifacts.length,
-        }),
-      )
-    )
-      return;
-    const packageId = selectedPackageId;
-    const artifactIds = detail.artifacts.map((artifact) => artifact.id);
-    try {
-      setBusy(true);
-      setError("");
-      await moveArtifactsToTrash(packageId, artifactIds, t("common.you"));
-      setSelectedArtifactId(null);
-      setSelectedPackageId(null);
-      setDetail(null);
-      await refreshLibrary();
-      undoRef.current = async () => {
-        await restoreTrashItems(artifactIds.map((artifactId) => ({ packageId, artifactId })));
-        setSelectedPackageId(packageId);
-        await refreshLibrary();
-      };
-      setUndoHint(t("app.undoTrashPackage"));
-      setView("trash");
-    } catch (e) {
-      setError(formatInvokeError(e, t));
-    } finally {
-      setBusy(false);
-    }
-  }
-
   async function handleRelocate(artifact: ArtifactView) {
     if (!selectedPackageId) return;
     try {
@@ -696,22 +661,72 @@ export default function App() {
     }
   }
 
-  async function handleRemovePackage() {
-    if (!selectedPackageId) return;
-    const title = detail?.package.title ?? selectedPackageId;
+  async function handleRemovePackage(packageId?: string) {
+    const id = packageId ?? selectedPackageId;
+    if (!id) return;
+    const title =
+      (id === selectedPackageId ? detail?.package.title : null) ??
+      library?.packages.find((p) => p.id === id)?.title ??
+      id;
     if (!window.confirm(t("app.confirmRemovePackage", { name: title }))) {
       return;
     }
     try {
       setError("");
-      await removePackage(selectedPackageId);
-      setSelectedPackageId(null);
-      setDetail(null);
-      setSelectedArtifactId(null);
-      setView("home");
+      await removePackage(id);
+      if (selectedPackageId === id) {
+        setSelectedPackageId(null);
+        setDetail(null);
+        setSelectedArtifactId(null);
+        setView("home");
+      }
       await refreshLibrary();
     } catch (e) {
       setError(formatInvokeError(e, t));
+    }
+  }
+
+  async function handleMovePackageToTrash(packageId?: string) {
+    const id = packageId ?? selectedPackageId;
+    if (!id) return;
+    try {
+      setBusy(true);
+      setError("");
+      const pkgDetail =
+        id === selectedPackageId && detail
+          ? detail
+          : await getPackageDetail(id);
+      if (!pkgDetail.artifacts.length) return;
+      if (
+        !window.confirm(
+          t("app.confirmTrashPackage", {
+            name: pkgDetail.package.title,
+            count: pkgDetail.artifacts.length,
+          }),
+        )
+      )
+        return;
+      const artifactIds = pkgDetail.artifacts.map((artifact) => artifact.id);
+      await moveArtifactsToTrash(id, artifactIds, t("common.you"));
+      if (selectedPackageId === id) {
+        setSelectedArtifactId(null);
+        setSelectedPackageId(null);
+        setDetail(null);
+      }
+      await refreshLibrary();
+      undoRef.current = async () => {
+        await restoreTrashItems(
+          artifactIds.map((artifactId) => ({ packageId: id, artifactId })),
+        );
+        setSelectedPackageId(id);
+        await refreshLibrary();
+      };
+      setUndoHint(t("app.undoTrashPackage"));
+      setView("trash");
+    } catch (e) {
+      setError(formatInvokeError(e, t));
+    } finally {
+      setBusy(false);
     }
   }
 
