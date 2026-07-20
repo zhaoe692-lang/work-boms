@@ -6,11 +6,11 @@ WorkBOM helps **content workers** — writers, designers, editors, and video tea
 
 Import `.wbom` packages, keep links to the original files on disk, and manage materials with relationships, versions, search, and a knowledge graph — without uploading your source files.
 
-> Early Preview · macOS Apple Silicon · Windows x64 · MIT · No telemetry · Your files stay local
+> Early Preview · **macOS + Windows** · MIT · No telemetry · Your files stay local
 
-[![WorkBOM demo](docs/images/cockpit.png)](docs/images/demo.mp4)
+![WorkBOM knowledge graph demo](docs/images/demo.gif)
 
-> Demo video: [docs/images/demo.mp4](docs/images/demo.mp4) · click the image above to open it.
+**[Download latest release](https://github.com/zhaoe692-lang/work-boms/releases/latest)** · [Star the repo](https://github.com/zhaoe692-lang/work-boms) if this helps your workflow.
 
 ## Who it’s for
 
@@ -63,21 +63,24 @@ WorkBOM turns scattered AI materials into a **content library**:
 
 ## Download
 
-Prebuilt builds: [GitHub Releases](https://github.com/zhaoe692-lang/work-boms/releases)
+Latest builds: **[Releases](https://github.com/zhaoe692-lang/work-boms/releases/latest)** (v0.1.92)
 
-### macOS (Apple Silicon)
+| Platform | File |
+| --- | --- |
+| **macOS** (Apple Silicon) | [`WorkBOM_0.1.92_aarch64.dmg`](https://github.com/zhaoe692-lang/work-boms/releases/download/v0.1.92/WorkBOM_0.1.92_aarch64.dmg) |
+| **Windows** (x64) | [`WorkBOM_0.1.92_x64-setup.exe`](https://github.com/zhaoe692-lang/work-boms/releases/download/v0.1.92/WorkBOM_0.1.92_x64-setup.exe) |
 
-1. Download `WorkBOM_<version>_aarch64.dmg`
-2. Open the DMG and drag **WorkBOM** into **Applications**
-3. If macOS blocks the unsigned preview: **System Settings → Privacy & Security → Open Anyway**
-4. Import a `.wbom` package from the project sidebar
+### macOS
 
-### Windows (x64)
+1. Open the DMG and drag **WorkBOM** into **Applications**
+2. If blocked: **System Settings → Privacy & Security → Open Anyway**
+3. Import a `.wbom` package from the project sidebar (or generate one with the **Create Project** plugin)
 
-1. Download `WorkBOM_<version>_x64-setup.exe`
-2. Run the installer
-3. If SmartScreen appears: **More info → Run anyway**
-4. Import a `.wbom` package from the project sidebar
+### Windows
+
+1. Run the installer
+2. If SmartScreen appears: **More info → Run anyway**
+3. Import a `.wbom` package from the project sidebar (or generate one with the **Create Project** plugin)
 
 Unsigned preview builds (not code-signed / notarized yet).
 
