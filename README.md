@@ -8,7 +8,9 @@ Import `.wbom` packages, keep links to the original files on disk, and manage ma
 
 > Early Preview · macOS Apple Silicon · Windows x64 · MIT · No telemetry · Your files stay local
 
-<video src="docs/images/demo.mp4" controls muted playsinline width="100%"></video>
+[![WorkBOM demo](docs/images/cockpit.png)](docs/images/demo.mp4)
+
+> Demo video: [docs/images/demo.mp4](docs/images/demo.mp4) · click the image above to open it.
 
 ## Who it’s for
 
