@@ -6,9 +6,9 @@ WorkBOM helps **content workers** — writers, designers, editors, and video tea
 
 Import `.wbom` packages, keep links to the original files on disk, and manage materials with relationships, versions, search, and a knowledge graph — without uploading your source files.
 
-> Early Preview · macOS Apple Silicon · MIT · No telemetry · Your files stay local
+> Early Preview · macOS Apple Silicon · Windows x64 · MIT · No telemetry · Your files stay local
 
-![Project cockpit — Echo City demo](docs/images/cockpit.png)
+<video src="docs/images/demo.mp4" controls muted playsinline width="100%"></video>
 
 ## Who it’s for
 
@@ -39,13 +39,13 @@ WorkBOM turns scattered AI materials into a **content library**:
 
 ## Screenshots
 
-| Knowledge graph | Smart search |
+| Project cockpit | Knowledge graph |
 | --- | --- |
-| ![Knowledge graph](docs/images/knowledge-graph.png) | ![Smart search](docs/images/smart-search.png) |
+| ![Project cockpit](docs/images/cockpit.png) | ![Knowledge graph](docs/images/knowledge-graph.png) |
 
-| Asset table |
-| --- |
-| ![Asset table](docs/images/asset-table.png) |
+| Smart search | Asset table |
+| --- | --- |
+| ![Smart search](docs/images/smart-search.png) | ![Asset table](docs/images/asset-table.png) |
 
 ## Early Preview scope
 
@@ -55,7 +55,7 @@ WorkBOM turns scattered AI materials into a **content library**:
 | Content cockpit | Metrics, relationship map, metadata and status |
 | Knowledge graph | Relation filters, focus views, graph insights |
 | Smart search | Full-text + local semantic retrieval |
-| Asset operations | Preview, open, reveal in Finder, rename, reconnect, relate |
+| Asset operations | Preview, open, reveal in Finder / Explorer, rename, reconnect, relate |
 | Recovery | Soft delete, restore, permanent deletion |
 | Official plugin | **Create Project** — generate importable `.wbom` from Cursor / Codex / Claude / workBuddy |
 
@@ -63,17 +63,26 @@ WorkBOM turns scattered AI materials into a **content library**:
 
 Prebuilt builds: [GitHub Releases](https://github.com/zhaoe692-lang/work-boms/releases)
 
+### macOS (Apple Silicon)
+
 1. Download `WorkBOM_<version>_aarch64.dmg`
 2. Open the DMG and drag **WorkBOM** into **Applications**
 3. If macOS blocks the unsigned preview: **System Settings → Privacy & Security → Open Anyway**
 4. Import a `.wbom` package from the project sidebar
 
-Apple Silicon only for now. Not code-signed or notarized yet.
+### Windows (x64)
+
+1. Download `WorkBOM_<version>_x64-setup.exe`
+2. Run the installer
+3. If SmartScreen appears: **More info → Run anyway**
+4. Import a `.wbom` package from the project sidebar
+
+Unsigned preview builds (not code-signed / notarized yet).
 
 ## Privacy
 
 - No telemetry, analytics, accounts, or cloud sync
-- Indexes and app state live in the macOS application-data directory
+- Indexes and app state live in the OS application-data directory
 - Source materials are linked, not uploaded or duplicated into the library
 - Semantic search runs locally with a bundled embedding model
 
@@ -93,7 +102,7 @@ Use the in-app **Create Project** plugin to generate packages from AI agent sess
 
 ## Build from source
 
-Requirements: macOS + Xcode CLT, Node.js 20+, Rust stable.
+Requirements: Node.js 20+, Rust stable. On macOS also Xcode CLT; on Windows, MSVC / Visual Studio Build Tools and WebView2.
 
 ```bash
 npm install
@@ -102,10 +111,16 @@ npm run tauri dev
 ```
 
 ```bash
+# macOS local package helper
 npm run build:app
 ```
 
-DMG output goes to `releases/` (local only).
+```bash
+# Windows NSIS installer
+npm run tauri -- build --bundles nsis
+```
+
+CI also builds Windows via GitHub Actions (`Build Windows` workflow).
 
 ### Embedding model
 
@@ -117,7 +132,7 @@ Bundled under `src-tauri/resources/models/bge-small-zh-v1.5-int8/` (see `MODEL_L
 
 ## Known limitations
 
-- Unsigned / not notarized macOS preview
+- Unsigned preview: macOS Gatekeeper / Windows SmartScreen may warn
 - Inspiration Board may be incomplete or hidden in Early Preview
 - When filing Issues, do **not** attach private source files, keys, or confidential project data
 
@@ -127,4 +142,4 @@ MIT — see [LICENSE](./LICENSE).
 
 ## 中文简介
 
-WorkBOM 是面向 **内容工作者**（写作、设计、剪辑、影视等）的本地 AI **素材 / 内容管理** 工作台：把 AI 协作产生的文稿、图像、音频与版本收成可浏览、可检索、有关系的项目库。文件留在本机，不上传。当前为 macOS Apple Silicon Early Preview。
+WorkBOM 是面向 **内容工作者**（写作、设计、剪辑、影视等）的本地 AI **素材 / 内容管理** 工作台：把 AI 协作产生的文稿、图像、音频与版本收成可浏览、可检索、有关系的项目库。文件留在本机，不上传。当前 Early Preview 提供 **macOS Apple Silicon** 与 **Windows x64** 预构建包。
