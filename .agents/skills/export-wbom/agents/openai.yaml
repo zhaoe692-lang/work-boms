@@ -1,0 +1,4 @@
+interface:
+  display_name: "WorkBOM 创建项目"
+  short_description: "从当前 AI 协作记录导出可导入 WorkBOM 的成果包（strict 校验）"
+  default_prompt: "Use $export-wbom to export this session into a WorkBOM .wbom package with strict validation."
