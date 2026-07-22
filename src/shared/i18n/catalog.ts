@@ -72,7 +72,7 @@ export const catalog = {
     "nav.settings": "设置",
     "nav.openProjects": "打开项目",
     "nav.collapseProjects": "收起项目",
-    "nav.importWbom": "导入成果包",
+    "nav.importWbom": "导入项目",
     "nav.projects": "项目",
     "nav.revealInSidebar": "在侧栏中显示选中项",
     "nav.expandAll": "展开全部",
